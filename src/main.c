@@ -4,5 +4,5 @@ $Author$ $Date$ $Hash$
 
 int main() {
   printf("Hello, World!");
-  return 0;
+  return 42;
 }

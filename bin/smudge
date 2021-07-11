@@ -7,10 +7,10 @@ printf 'Smudging %s\n' "$1" >&2
 
 # https://git-scm.com/docs/pretty-formats
 if ! mapfile -t latest_commit < <(git log --max-count 1 \
-                                         --format='%an%n%aD%n%h' \
-                                         -- \
-                                         "$1" \
-                                         2> /dev/null); then
+                                          --format='%an%n%aD%n%h' \
+                                          -- \
+                                          "$1" \
+                                          2> /dev/null); then
   # The above will fail on the initial commit.
   printf 'No history on %s\n' "$1" >&2
 

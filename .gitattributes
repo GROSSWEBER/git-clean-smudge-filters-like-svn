@@ -1,0 +1,5 @@
+# Line endings according to the OS.
+* text=auto
+
+*.c text filter=metadata
+*.h text filter=metadata

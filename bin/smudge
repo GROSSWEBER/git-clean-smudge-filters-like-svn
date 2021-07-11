@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Any output on stdout is taken as the work tree file contents, hence report on stderr.
+printf 'Smudging %s\n' "$1" >&2
+
+# https://git-scm.com/docs/pretty-formats
+if ! mapfile -t latest_commit < <(git log --max-count 1 \
+                                         --format='%an%n%aD%n%h' \
+                                         -- \
+                                         "$1" \
+                                         2> /dev/null); then
+  # The above will fail on the initial commit.
+  printf 'No history on %s\n' "$1" >&2
+
+  # In this case, just output stdin.
+  cat
+  exit
+fi
+
+# In case you need to display the contents of $latest_commit, uncomment this line.
+# typeset -p latest_commit >&2
+
+if [[ ${#latest_commit[@]} -eq 0 ]]; then
+  # The above test will succeed if there are commits, but none match the file.
+  printf 'No history on %s\n' "$1" >&2
+
+  # In this case, just output stdin.
+  cat
+  exit
+fi
+
+# $ needs to be escaped once (\) because we are in double quotes and the search
+# expression does not refer to a Bash variable.
+#
+# Because $ also is a special character for sed's search expression, we need to
+# escape once more (\\) to have use it as a literal.
+sed --expression="s/\(\\\$Author\)\(\\\$\)/\1: ${latest_commit[0]}\2/" | \
+  sed --expression="s/\(\\\$Date\)\(\\\$\)/\1: ${latest_commit[1]}\2/" | \
+  sed --expression="s/\(\\\$Hash\)\(\\\$\)/\1: ${latest_commit[2]}\2/"

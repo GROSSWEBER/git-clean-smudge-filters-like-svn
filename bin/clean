@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+set -e
+
+# Any output on stdout is taken as the staged blob contents, hence report on stderr.
+printf 'Cleaning %s\n' "$1" >&2
+
+sed --expression='s/\(\$\)\(Author\|Date\|Hash\):[^$]*\(\$\)/\1\2\3/g'

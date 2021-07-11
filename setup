@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+set -e
+
+git config --local filter.metadata.clean "bin/clean %f"
+git config --local filter.metadata.smudge "bin/smudge %f"

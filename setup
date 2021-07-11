@@ -4,3 +4,6 @@ set -e
 
 git config --local filter.metadata.clean "bin/clean %f"
 git config --local filter.metadata.smudge "bin/smudge %f"
+
+rm --force "$(git rev-parse --git-dir)/index"
+git checkout HEAD -- "$(git rev-parse --show-toplevel)"
